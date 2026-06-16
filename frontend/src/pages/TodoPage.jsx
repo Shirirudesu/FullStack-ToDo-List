@@ -76,12 +76,6 @@ export default function TodoList() {
     fetchTodos();
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    console.log("LOGGED OUT");
-    navigate("/login");
-  };
-
   return (
     <div>
       <h2>Tasks List</h2>
@@ -121,14 +115,6 @@ export default function TodoList() {
           </li>
         ))}
       </ul>
-      <div>
-        <button
-          onClick={handleLogout}
-          style={{ backgroundColor: "#ff4d4f", color: "#fff" }}
-        >
-          Logout
-        </button>
-      </div>
     </div>
   );
 }

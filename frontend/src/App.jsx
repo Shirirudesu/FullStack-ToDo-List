@@ -8,9 +8,10 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
   return (
     <BrowserRouter>
-      <Navbar />
+      <Navbar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
       <section id="center">
         <Routes>
@@ -28,7 +29,7 @@ function App() {
             path="/todo-list"
             element={
               <PrivateRoute>
-                <TodoList />
+                <TodoList searchQuery={searchQuery} />
               </PrivateRoute>
             }
           />

@@ -12,9 +12,10 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
+import TextField from "@mui/material/TextField";
 import { useNavigate, Link } from "react-router-dom";
 
-function Navbar() {
+function Navbar({ searchQuery, setSearchQuery }) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -43,6 +44,7 @@ function Navbar() {
           <AssignmentTurnedInIcon
             sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
           />
+
           <Typography
             variant="h6"
             noWrap
@@ -61,6 +63,28 @@ function Navbar() {
           >
             TODOAPP
           </Typography>
+          <TextField
+            placeholder="Search tasks..."
+            size="small"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            sx={{
+              mx: 4,
+              width: { xs: "100%", md: "350px" },
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              borderRadius: "4px",
+              "& .MuiOutlinedInput-root": {
+                color: "white",
+                "& fieldset": { border: "none" },
+                "&:hover fieldset": { border: "none" },
+                "&.Mui-focused fieldset": { border: "none" },
+              },
+              "& .MuiInputBase-input::placeholder": {
+                color: "rgba(255, 255, 255, 0.6)",
+                opacity: 1,
+              },
+            }}
+          />
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"

@@ -1,5 +1,7 @@
 import React from "react";
 import Drawer from "@mui/material/Drawer";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
 import { useState } from "react";
 import api from "../api/axios";
 
@@ -22,6 +24,8 @@ const TodoSidebar = ({
   setPanelDueDate,
 
   fetchTodos,
+
+  onDelete,
 }) => {
   return (
     <Drawer
@@ -43,7 +47,15 @@ const TodoSidebar = ({
       >
         {selectedTodo && (
           <>
-            <h3>Advanced task settings</h3>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <h3>Advanced task settings</h3>
+              <IconButton
+                onClick={() => onDelete(selectedTodo._id)}
+                size="small"
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            </div>
             <div>
               <input
                 type="text"

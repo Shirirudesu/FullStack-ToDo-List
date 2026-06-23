@@ -25,6 +25,8 @@ export default function TodoList({ searchQuery }) {
   const [panelCategory, setPanelCategory] = useState("Tasks");
   const [panelDueDate, setPanelDueDate] = useState("");
 
+  const [originalText, setOriginalText] = useState("");
+
   const navigate = useNavigate();
 
   //GETTING TODOS
@@ -91,7 +93,12 @@ export default function TodoList({ searchQuery }) {
 
   //UPDATING(SAVING)
   const handleUpdateTodo = async (id) => {
+    //Шаг 7: если текст не изменился — не отправляем PUT-запрос. Если текущее значение совпадает с исходным, выходим из режима редактирования
     try {
+      if (editingText === originalText) {
+        setEditingId(null);
+        return;
+      }
       await api.put(`/todos/${id}`, {
         title: editingText,
       });
@@ -128,10 +135,11 @@ export default function TodoList({ searchQuery }) {
     setIsPanelOpen(true);
   };
 
-  //Click
+  //Шаг 2: Создаём обработчик
   const handleEditClick = (todo) => {
     setEditingId(todo._id);
     setEditingText(todo.title);
+    setOriginalText(todo.title);
   };
 
   return (
@@ -180,6 +188,7 @@ export default function TodoList({ searchQuery }) {
       ) : (
         <ul>
           {filteredTodos.map((todo) =>
+            //Шаг 3: Если эта задача редактируется, то показываем input, а если нет, то показываем обычный TodoItem
             editingId === todo._id ? (
               <li
                 key={todo._id}
@@ -192,11 +201,26 @@ export default function TodoList({ searchQuery }) {
               >
                 <input
                   type="text"
+                  autoFocus
                   value={editingText}
+                  //Шаг 4: Сделать input управляемым, Печатаем, editingText обновляется
                   onChange={(event) => setEditingText(event.target.value)}
+                  onKeyDown={(event) => {
+                    //Шаг 5-6: Клик на Enter и клик за пределами поля, плюс убираем фокус с инпута
+                    if (event.key === "Enter") {
+                      handleUpdateTodo(todo._id);
+                    }
+                    if (event.key === "Escape") {
+                      setEditingId(null);
+                      setEditingText("");
+                    }
+                  }}
+                  onBlur={() => {
+                    handleUpdateTodo(todo._id);
+                  }}
                 />
-                <button onClick={() => handleUpdateTodo(todo._id)}>Save</button>
-                <button onClick={() => setEditingId(null)}>Cancel</button>
+
+                {/* Save and Cancel */}
               </li>
             ) : (
               <TodoItem
@@ -226,6 +250,7 @@ export default function TodoList({ searchQuery }) {
           panelDueDate={panelDueDate}
           setPanelDueDate={setPanelDueDate}
           fetchTodos={fetchTodos}
+          onDelete={handleDeleteTodo}
         />
       </div>
     </div>

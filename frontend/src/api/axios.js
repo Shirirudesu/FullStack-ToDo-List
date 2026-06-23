@@ -19,10 +19,12 @@ api.interceptors.request.use(function (config) {
 
 // Добавляем Response Interceptor (Перехватчик ОТВЕТА) — пока оставим пустым
 api.interceptors.response.use(
-  function (response) {
-    return response;
-  },
-  function (error) {
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
     return Promise.reject(error);
   },
 );
